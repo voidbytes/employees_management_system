@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>修改职工</title>
+    <link rel="stylesheet" href="/static/css/layui.css">
+    <style>
+        .form-box {
+            width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .form-box h2 { text-align: center; }
+        .form-box hr { margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="form-box">
+        <h2>✏️ 修改职工信息</h2>
+        <hr>
+        <form class="layui-form" action="/changed/{{ user.emp_id }}" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">工号</label>
+                <div class="layui-input-block">
+                    <input type="text" value="{{ user.emp_id }}" disabled class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" required value="{{ user.name }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">部门</label>
+                <div class="layui-input-block">
+                    <input type="text" name="department" required value="{{ user.department }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">出勤日期</label>
+                <div class="layui-input-block">
+                    <input type="date" name="attendance_date" required value="{{ user.attendance_date }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">当月出勤天数</label>
+                <div class="layui-input-block">
+                    <input type="number" name="days_present" required value="{{ user.days_present }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="text-align:center;">
+                    <button class="layui-btn" lay-submit>保存</button>
+                    <a href=" " class="layui-btn layui-btn-primary">返回</a >
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="/static/layui.all.js"></script>
+</body>
+</html>
