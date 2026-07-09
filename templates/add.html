@@ -2,100 +2,98 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>职工信息管理 - 普通员工</title>
+    <title>添加职工 - 管理员</title>
     <link rel="stylesheet" href="/static/css/layui.css">
     <style>
-        .header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f8f8f8;
-            padding: 10px 20px;
-            border-radius: 4px;
-            margin-bottom: 15px;
+        .form-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .search-box {
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 4px;
-            margin-bottom: 15px;
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
         }
-        .search-box form {
+        .form-item {
+            margin-bottom: 20px;
+        }
+        .form-item label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        .form-item input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .form-item input:focus {
+            border-color: #5fb878;
+            outline: none;
+        }
+        .form-actions {
             display: flex;
             gap: 10px;
-            align-items: center;
+            justify-content: center;
+            margin-top: 30px;
         }
-        .search-box select { padding: 5px 10px; border-radius: 4px; border: 1px solid #ddd; }
-        .search-box input { flex: 1; padding: 5px 10px; border-radius: 4px; border: 1px solid #ddd; }
-        .sort-bar { display: flex; gap: 10px; margin: 10px 0; font-size: 14px; }
-        .sort-bar a { color: #666; text-decoration: none; padding: 2px 10px; border-radius: 3px; }
-        .sort-bar a:hover { background: #e8e8e8; }
-        .sort-bar a.active { background: #5fb878; color: #fff; }
-        .count-info { color: #999; font-size: 12px; margin-top: 10px; }
-        .tip-info { margin-top: 10px; color: #999; font-size: 12px; }
+        .error-msg {
+            color: #ff5722;
+            text-align: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #fff3e0;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
-    <div style="padding:20px;">
-        <!-- 顶部栏 -->
-        <div class="header-bar">
-            <h2>👔 职工信息管理系统（普通员工）</h2>
-            <div>
-                <span>欢迎，{{ username }}</span>
-                <a href=" " class="layui-btn layui-btn-sm">📊 统计</a >
-                <a href="/export" class="layui-btn layui-btn-sm layui-btn-warm">📥 导出</a >
-                <a href="/logout" class="layui-btn layui-btn-sm layui-btn-danger">退出</a >
+    <div class="form-container">
+        <h2>添加职工信息</h2>
+
+        {% if error %}
+        <div class="error-msg">{{ error }}</div>
+        {% endif %}
+
+        <form action="/add2" method="post">
+            <div class="form-item">
+                <label>工号</label>
+                <input type="text" name="emp_id" placeholder="请输入工号" required>
             </div>
-        </div>
 
-        <!-- 搜索 -->
-        <div class="search-box">
-            <form action="/search" method="post">
-                <select name="search_type">
-                    <option value="id">工号</option>
-                    <option value="name">姓名</option>
-                    <option value="department">部门</option>
-                </select>
-                <input type="text" name="keyword" placeholder="请输入搜索关键词" value="{{ keyword or '' }}">
-                <button type="submit" class="layui-btn layui-btn-sm">🔍 搜索</button>
-            </form>
-        </div>
+            <div class="form-item">
+                <label>姓名</label>
+                <input type="text" name="name" placeholder="请输入姓名" required>
+            </div>
 
-        <!-- 排序 -->
-        <div class="sort-bar">
-            <span>排序：</span>
-            <a href="/sort/date/asc">出勤日期 ↑</a >
-            <a href="/sort/date/desc">出勤日期 ↓</a >
-            <a href="/sort/days/asc">出勤天数 ↑</a >
-            <a href="/sort/days/desc">出勤天数 ↓</a >
-        </div>
+            <div class="form-item">
+                <label>部门</label>
+                <input type="text" name="department" placeholder="请输入部门" required>
+            </div>
 
-        <!-- 表格 -->
-        <table class="layui-table">
-            <thead>
-                <tr>
-                    <th>工号</th>
-                    <th>姓名</th>
-                    <th>部门</th>
-                    <th>出勤日期</th>
-                    <th>当月出勤天数</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for emp in employees %}
-                <tr>
-                    <td>{{ emp.emp_id }}</td>
-                    <td>{{ emp.name }}</td>
-                    <td>{{ emp.department }}</td>
-                    <td>{{ emp.attendance_date }}</td>
-                    <td>{{ emp.days_present }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="count-info">共 {{ employees|length }} 条记录</div>
-        <div class="tip-info">⚠️ 普通员工仅可查看、查询、统计和导出数据</div>
+            <div class="form-item">
+                <label>出勤日期</label>
+                <input type="date" name="attendance_date" required>
+            </div>
+
+            <div class="form-item">
+                <label>当月出勤天数</label>
+                <input type="number" name="days_present" min="0" max="31" placeholder="请输入出勤天数" required>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="layui-btn layui-btn-normal">确认添加</button>
+                <a href="/home" class="layui-btn layui-btn-primary">返回</a>
+            </div>
+        </form>
     </div>
-    <script src="/static/layui.all.js"></script>
 </body>
 </html>
